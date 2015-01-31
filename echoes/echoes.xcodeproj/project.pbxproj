@@ -24,6 +24,7 @@
 		5A7D1BA21A7D50EE0001F810 /* AFURLRequestSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A7D1B971A7D50EE0001F810 /* AFURLRequestSerialization.m */; };
 		5A7D1BA31A7D50EE0001F810 /* AFURLResponseSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A7D1B991A7D50EE0001F810 /* AFURLResponseSerialization.m */; };
 		5A7D1BA41A7D50EE0001F810 /* AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A7D1B9B1A7D50EE0001F810 /* AFURLSessionManager.m */; };
+		5A7D1BA61A7D70E60001F810 /* CustomCircularRegion.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A7D1BA51A7D70E60001F810 /* CustomCircularRegion.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +73,8 @@
 		5A7D1B991A7D50EE0001F810 /* AFURLResponseSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AFURLResponseSerialization.m; path = "../../../Downloads/AFNetworking-master/AFNetworking/AFURLResponseSerialization.m"; sourceTree = "<group>"; };
 		5A7D1B9A1A7D50EE0001F810 /* AFURLSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AFURLSessionManager.h; path = "../../../Downloads/AFNetworking-master/AFNetworking/AFURLSessionManager.h"; sourceTree = "<group>"; };
 		5A7D1B9B1A7D50EE0001F810 /* AFURLSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AFURLSessionManager.m; path = "../../../Downloads/AFNetworking-master/AFNetworking/AFURLSessionManager.m"; sourceTree = "<group>"; };
+		5A7D1BA51A7D70E60001F810 /* CustomCircularRegion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomCircularRegion.m; sourceTree = "<group>"; };
+		5A7D1BA71A7D70F80001F810 /* CustomCircularRegion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CustomCircularRegion.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,8 +123,10 @@
 				5A20498F1A7CAC8600E03E91 /* MainViewController.m */,
 				5A2049941A7CAC8600E03E91 /* Images.xcassets */,
 				5A2049961A7CAC8600E03E91 /* LaunchScreen.xib */,
-				5A2049D31A7CB30200E03E91 /* GeofencingViewController.m */,
 				5A2049D51A7CB34100E03E91 /* GeofencingViewController.h */,
+				5A2049D31A7CB30200E03E91 /* GeofencingViewController.m */,
+				5A7D1BA71A7D70F80001F810 /* CustomCircularRegion.h */,
+				5A7D1BA51A7D70E60001F810 /* CustomCircularRegion.m */,
 				5A2049D61A7D209D00E03E91 /* SendMessageViewController.m */,
 				5A2049D81A7D20BB00E03E91 /* SendMessageViewController.h */,
 				5A2049871A7CAC8600E03E91 /* Supporting Files */,
@@ -286,6 +291,7 @@
 				5A7D1BA41A7D50EE0001F810 /* AFURLSessionManager.m in Sources */,
 				5A7D1BA21A7D50EE0001F810 /* AFURLRequestSerialization.m in Sources */,
 				5A2049901A7CAC8600E03E91 /* MainViewController.m in Sources */,
+				5A7D1BA61A7D70E60001F810 /* CustomCircularRegion.m in Sources */,
 				5A7D1BA31A7D50EE0001F810 /* AFURLResponseSerialization.m in Sources */,
 				5A2049D41A7CB30200E03E91 /* GeofencingViewController.m in Sources */,
 				5A20498D1A7CAC8600E03E91 /* AppDelegate.m in Sources */,
