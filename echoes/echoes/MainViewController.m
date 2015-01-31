@@ -16,31 +16,34 @@
 
 @implementation MainViewController{
     UIButton *wantToSendButton;
-}
-
--(void)loadView{
-    //UIView* v = [[UIView alloc]initWithFrame:(CGRect){10,10,300,300}];
-    //v.backgroundColor = [UIColor redColor];
-    //self.view = v;
-    //
-    //[super loadView];
-    UIView *contentView = [[UIView alloc]init];
-    contentView.backgroundColor = [UIColor redColor];
-    wantToSendButton = [[UIButton alloc]initWithFrame:(CGRect){100, 400, 200, 50}];
-    [wantToSendButton setTitle:@"Send Message" forState:UIControlStateNormal];
-    [wantToSendButton addTarget:self action:@selector(wantToSendButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-    [contentView addSubview:wantToSendButton];
-    self.view = contentView;
+    UIButton *takeImageButton;
+    UIButton *takeVideoButton;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSArray *dic = @[@{@"data" : @"Hello",
-                        @"latitude" :@51,
-                        @"longitude" : @-0.1,
-                        @"radius" : @1000}];
-    //GeofencingViewController *geo = [[GeofencingViewController alloc] initWithLocationDic:dic];
-    //[self.navigationController pushViewController:geo animated:YES];
+    wantToSendButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    wantToSendButton.frame = (CGRect){100,200,200,50};
+    [wantToSendButton setTitle:@"Send Message" forState:UIControlStateNormal];
+    [wantToSendButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [wantToSendButton addTarget:self action:@selector(wantToSendButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+
+    takeImageButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    takeImageButton.frame = (CGRect){100,300,200,50};
+    [takeImageButton setTitle:@"Send Image" forState:UIControlStateNormal];
+    [takeImageButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [takeImageButton addTarget:self action:@selector(takeImageButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+
+
+    takeVideoButton = [UIButton buttonWithType: UIButtonTypeRoundedRect];
+    takeVideoButton.frame = (CGRect){100,400,200,50};
+    [takeVideoButton setTitle:@"Send Video" forState:UIControlStateNormal];
+    [takeVideoButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [takeVideoButton addTarget:self action:@selector(takeVideoButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+
+    [self.view addSubview wantToSendButton];
+    [self.view addSubview takeImageButton];
+    [self.view addSubview takeVideoButton];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -48,9 +51,20 @@
     // Dispose of any resources that can be recreated.
 }
 
--(void) wantToSendButtonPressed {
-    //SendMessageViewController *sendMessageVC = [[SendMessageViewController alloc]init];
-    GeofencingViewController *geo = [[GeofencingViewController alloc]initWithLocationDic:nil];
-    [self.navigationController pushViewController:geo animated:YES];
+-(void)wantToSendButtonPressed {
+    SendMessageViewController *sendMessageVC = [[SendMessageViewController alloc]init];
+    //GeofencingViewController *geo = [[GeofencingViewController alloc]initWithLocationDic:nil];
+    [self.navigationController pushViewController:sendMessageVC animated:YES];
+}
+
+-(void)takeImageButtonPressed{
+    UIImagePickerController *imagePicker = [[UIImagePickerController alloc]initWithRootViewController: self];
+    [self presentViewController:imagePicker animated:YES completion:{
+
+    }];
+}
+
+-(void)takeVideoButtonPressed{
+
 }
 @end
