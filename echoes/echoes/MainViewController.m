@@ -49,7 +49,8 @@
 }
 
 -(void) wantToSendButtonPressed {
-    SendMessageViewController *sendMessageVC = [[SendMessageViewController alloc]init];
-    [self.navigationController pushViewController:sendMessageVC animated:YES];
+    //SendMessageViewController *sendMessageVC = [[SendMessageViewController alloc]init];
+    GeofencingViewController *geo = [[GeofencingViewController alloc]initWithLocationDic:nil];
+    [self.navigationController pushViewController:geo animated:YES];
 }
 @end

@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "GeofencingViewController.h"
+#import "AFHTTPRequestOperationManager.h"
 
 @implementation GeofencingViewController{
 }
@@ -33,6 +34,7 @@
     if ([_locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
       //  [_locationManager requestAlwaysAuthorization];
     }
+    _locationManager.distanceFilter = 500;
     [_locationManager startUpdatingLocation];
     for(NSDictionary* dic in _locationDic){
         NSString *titleName = [dic valueForKey:@"data"];
@@ -59,13 +61,15 @@
     [alert show];
 }
 
--(void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region{
-    
-}
-
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
-    CLLocation *location = locations[0];
-    NSLog(@"%f, %f", location.coordinate.latitude, location.coordinate.longitude);
+    //CLLocation *location = locations[0];
+    //NSLog(@"%f, %f", location.coordinate.latitude, location.coordinate.longitude);
+    AFHTTPRequestOperationManager *httpManager = [AFHTTPRequestOperationManager manager];
+    [httpManager GET:@"https://echoes-ios.herokuapp.com/messages" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
 }
 
 - (void)locationManager:(CLLocationManager *)manager monitoringDidFailForRegion:(CLRegion *)region withError:(NSError *)error {
