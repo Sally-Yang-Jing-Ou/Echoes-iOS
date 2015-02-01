@@ -26,6 +26,7 @@
 		5A7D1BA41A7D50EE0001F810 /* AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A7D1B9B1A7D50EE0001F810 /* AFURLSessionManager.m */; };
 		5A7D1BA61A7D70E60001F810 /* CustomCircularRegion.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A7D1BA51A7D70E60001F810 /* CustomCircularRegion.m */; };
 		5A7D1BAA1A7DCEDF0001F810 /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A7D1BA91A7DCEDF0001F810 /* MapViewController.m */; };
+		5A7D1BAF1A7DFB360001F810 /* CustomAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A7D1BAE1A7DFB360001F810 /* CustomAnnotationView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +79,8 @@
 		5A7D1BA71A7D70F80001F810 /* CustomCircularRegion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CustomCircularRegion.h; sourceTree = "<group>"; };
 		5A7D1BA81A7DCEC50001F810 /* MapViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
 		5A7D1BA91A7DCEDF0001F810 /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
+		5A7D1BAD1A7DFB160001F810 /* CustomAnnotationView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CustomAnnotationView.h; sourceTree = "<group>"; };
+		5A7D1BAE1A7DFB360001F810 /* CustomAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomAnnotationView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,6 +137,8 @@
 				5A2049D81A7D20BB00E03E91 /* SendMessageViewController.h */,
 				5A7D1BA81A7DCEC50001F810 /* MapViewController.h */,
 				5A7D1BA91A7DCEDF0001F810 /* MapViewController.m */,
+				5A7D1BAD1A7DFB160001F810 /* CustomAnnotationView.h */,
+				5A7D1BAE1A7DFB360001F810 /* CustomAnnotationView.m */,
 				5A2049871A7CAC8600E03E91 /* Supporting Files */,
 			);
 			path = echoes;
@@ -296,6 +301,7 @@
 				5A7D1BA41A7D50EE0001F810 /* AFURLSessionManager.m in Sources */,
 				5A7D1BA21A7D50EE0001F810 /* AFURLRequestSerialization.m in Sources */,
 				5A2049901A7CAC8600E03E91 /* MainViewController.m in Sources */,
+				5A7D1BAF1A7DFB360001F810 /* CustomAnnotationView.m in Sources */,
 				5A7D1BA61A7D70E60001F810 /* CustomCircularRegion.m in Sources */,
 				5A7D1BA31A7D50EE0001F810 /* AFURLResponseSerialization.m in Sources */,
 				5A2049D41A7CB30200E03E91 /* GeofencingViewController.m in Sources */,

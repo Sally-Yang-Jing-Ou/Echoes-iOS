@@ -9,15 +9,18 @@
 #import <Foundation/Foundation.h>
 #import "MapViewController.h"
 #import <MapKit/MapKit.h>
+#import "CustomAnnotationView.h"
 
 @implementation MapViewController{
     GeofencingViewController* geo;
+    NSMutableDictionary* viewDics;
 }
 
 -(instancetype)initWithFrame:(CGRect)frame Regions:(NSMutableArray *)regions PersonCenter:(CLLocationCoordinate2D)center Messages:(NSMutableDictionary *)messages{
     self = [super init];
     if(self){
         _frame = frame;
+        viewDics = @{}.mutableCopy;
     }
     return self;
 }
@@ -39,19 +42,21 @@
 }
 
 -(MKAnnotationView *) mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
-    MKPinAnnotationView *pinView = (MKPinAnnotationView*)[mapView dequeueReusableAnnotationViewWithIdentifier:@"CustomPinAnnotationView"];
-    if (!pinView)
-    {
+    CustomAnnotationView* pinView;
+    //CustomAnnotationView *pinView = (CustomAnnotationView*)[mapView dequeueReusableAnnotationViewWithIdentifier:@"CustomPinAnnotationView"];
+    //if (!pinView)
+    //{
         // If an existing pin view was not available, create one.
-        pinView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"CustomPinAnnotationView"];
-        //pinView.animatesDrop = YES;
-        //pinView.canShowCallout = YES;
+        pinView = [[CustomAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"CustomPinAnnotationView"];
+        pinView.animatesDrop = YES;
+        pinView.canShowCallout = YES;
         //pinView.image = [UIImage imageNamed:@"the-cloud.png"];
-        //pinView.calloutOffset = CGPointMake(0, 32);
+        //pinView.rightCalloutAccessoryView = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+        pinView.calloutOffset = CGPointMake(0, 32);
         pinView.pinColor = MKPinAnnotationColorRed;
-    } else {
-        pinView.annotation = annotation;
-    }
+   // } else {
+    //    pinView.annotation = annotation;
+   // }
     return pinView;
 }
 
@@ -73,14 +78,39 @@
 
 -(void)dataFinishedLoading{
     [_mapView removeAnnotations:_mapView.annotations];
+    [viewDics removeAllObjects];
     for(CLCircularRegion* r in geo.regions){
         MKPointAnnotation *annotation = [[MKPointAnnotation alloc]init];
         annotation.coordinate = r.center;
         [_mapView addAnnotation:annotation];
+        [viewDics setObject:annotation forKey:r.identifier];
     }
 }
 
 -(void)personLocationUpdated{
     _mapView.centerCoordinate = geo.personCenter;
+}
+
+-(void)geoFencingHit:(CLCircularRegion *)region{
+    MKPointAnnotation *ann = [viewDics objectForKey:region.identifier];
+    CustomAnnotationView *annV = (CustomAnnotationView*)[_mapView viewForAnnotation:ann];
+    NSString *m = [geo.messages objectForKey:region.identifier];
+    if(m.length > 100000){
+        NSData *data = [[NSData alloc]initWithBase64EncodedString:m options:NSDataBase64DecodingIgnoreUnknownCharacters];
+        UIImage* image = [UIImage imageWithData:data];
+        UIImageView* view = [[UIImageView alloc]initWithImage:image];
+        view.frame = (CGRect){-50,-65,100,70};
+        [annV addSubview:view];
+    }else{
+        //ann.title = m;
+        // [annV.text setText:m];
+        UILabel *l = [[UILabel alloc]initWithFrame:(CGRect){-60,-60,200,50}];
+        [l setText:m];
+        l.textAlignment = NSTextAlignmentCenter;
+        [l setFont:[UIFont fontWithName:@"Default" size:8]];
+        //        [l.layer setBorderWidth:2];
+        //        [l.layer setBorderColor:[UIColor blackColor].CGColor];
+        [annV addSubview:l];
+    }
 }
 @end

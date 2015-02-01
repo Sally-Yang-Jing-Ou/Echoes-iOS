@@ -12,12 +12,14 @@
 #import "CustomCircularRegion.h"
 
 @implementation GeofencingViewController{
+    BOOL run;
 }
 
 -(instancetype)initWithLocationDic:(NSArray *)locationDic{
     self = [super init];
     if(self){
         _locationDic = locationDic;
+        run = YES;
     }
     return self;
 }
@@ -45,21 +47,7 @@
 #pragma mark - CLLocationManager Delegate
 
 -(void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLCircularRegion *)region{
-    NSString *m = [_messages valueForKey:region.identifier];
-    if(m.length < 100000){
-        NSString *message = [NSString stringWithFormat:@"Entered region: %f, %f, %@",region.center.latitude, region.center.longitude, m];
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Region Alert" message:message delegate:nil cancelButtonTitle:@"Got it" otherButtonTitles:nil];
-        [alert show];
-    }else{
-        NSData *data = [[NSData alloc]initWithBase64EncodedString:m options:NSDataBase64DecodingIgnoreUnknownCharacters];
-        UIImage* image = [UIImage imageWithData:data];
-        UIViewController* v = [[UIViewController alloc]init];
-        v.view = [[UIImageView alloc]initWithImage:image];
-        //UINavigationController* nav = [[UINavigationController alloc]initWithRootViewController:self];
-        [self presentViewController:v animated:YES completion:^{
-            
-        }];
-    }
+    [_delegate geoFencingHit:region];
 }
 
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
@@ -99,7 +87,10 @@
             [_regions addObject:region];
             [_locationManager startMonitoringForRegion: region];
         }
-        [_delegate dataFinishedLoading];
+        if(run){
+            [_delegate dataFinishedLoading];
+            run = NO;
+        }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];

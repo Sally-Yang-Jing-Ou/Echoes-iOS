@@ -23,33 +23,47 @@
     
     NSString* putMessage;
     GeofencingViewController* geo;
+    UIImagePickerController *imagePicker;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     wantToSendButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    wantToSendButton.frame = (CGRect){100,200,200,50};
+    wantToSendButton.frame = (CGRect){100,200,200,80};
     [wantToSendButton setTitle:@"Send Message" forState:UIControlStateNormal];
-    [wantToSendButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [wantToSendButton setTitleColor:[UIColor colorWithRed:71.0/255 green:62.0/255 blue:63.0/255 alpha:1] forState:UIControlStateNormal];
+    wantToSendButton.layer.cornerRadius = 10; // this value vary as per your desire
+    wantToSendButton.clipsToBounds = YES;
+    wantToSendButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:20];
     [wantToSendButton addTarget:self action:@selector(wantToSendButtonPressed) forControlEvents:UIControlEventTouchUpInside];
 
     takeImageButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    takeImageButton.frame = (CGRect){100,300,200,50};
+    takeImageButton.frame = (CGRect){100,300,200,80};
     [takeImageButton setTitle:@"Send Image" forState:UIControlStateNormal];
-    [takeImageButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [takeImageButton setTitleColor: [UIColor colorWithRed:71.0/255 green:62.0/255 blue:63.0/255 alpha:1]  forState:UIControlStateNormal];
+    takeImageButton.layer.cornerRadius = 10; // this value vary as per your desire
+    takeImageButton.clipsToBounds = YES;
+    takeImageButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:20];
     [takeImageButton addTarget:self action:@selector(takeImageButtonPressed) forControlEvents:UIControlEventTouchUpInside];
 
 
     mapButton = [UIButton buttonWithType: UIButtonTypeRoundedRect];
-    mapButton.frame = (CGRect){100,400,200,50};
-    [mapButton setTitle:@"Send Video" forState:UIControlStateNormal];
-    [mapButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    mapButton.frame = (CGRect){100,400,200,80};
+    [mapButton setTitle:@"Show Map" forState:UIControlStateNormal];
+    [mapButton setTitleColor: [UIColor colorWithRed:71.0/255 green:62.0/255 blue:63.0/255 alpha:1]  forState:UIControlStateNormal];
+    mapButton.layer.cornerRadius = 10; // this value vary as per your desire
+    mapButton.clipsToBounds = YES;
+    mapButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:20];
     [mapButton addTarget:self action:@selector(mapButtonPressed) forControlEvents:UIControlEventTouchUpInside];
 
     [self.view addSubview: wantToSendButton];
     [self.view addSubview: takeImageButton];
     [self.view addSubview: mapButton];
     
+    [self.view setBackgroundColor:[UIColor colorWithRed:33.0/255 green:140.0/255 blue:141.0/255 alpha:1]];
+    [wantToSendButton setBackgroundColor:[UIColor colorWithRed:249.0/255 green:229.0/255 blue:89.0/255 alpha:1]];
+    [takeImageButton setBackgroundColor:[UIColor colorWithRed:239.0/255 green:113.0/255 blue:38.0/255 alpha:1]];
+    [mapButton setBackgroundColor:[UIColor colorWithRed:142.0/255 green:220.0/255 blue:157.0/255 alpha:1]];
     [self loadNavbar];
 }
 
@@ -65,7 +79,7 @@
 }
 
 -(void)takeImageButtonPressed{
-    UIImagePickerController* imagePicker = [[UIImagePickerController alloc]init];
+    imagePicker = [[UIImagePickerController alloc]init];
     imagePicker.sourceType = UIImagePickerControllerCameraCaptureModePhoto;
     imagePicker.delegate = self;
     [self presentViewController:imagePicker animated:YES completion:^{
@@ -75,9 +89,7 @@
 
 -(void)mapButtonPressed{
     MapViewController *mapViewController = [[MapViewController alloc]initWithFrame:(CGRect){0,50,self.view.frame.size.width, self.view.frame.size.height - 50} Regions: geo.regions PersonCenter:geo.personCenter Messages:geo.messages];
-    [self.navigationController presentViewController:mapViewController animated:YES completion:^{
-        
-    }];
+    [self.navigationController pushViewController: mapViewController animated:YES];
 }
 
 #pragma mark - SendMessageController Delegate
@@ -102,7 +114,6 @@
     }
     _locationManager.delegate = self;
     putMessage = imageString;
-    [picker.navigationController popViewControllerAnimated:YES];
     [_locationManager startUpdatingLocation];
 }
 
@@ -122,9 +133,15 @@
                                  @"radius": [NSString stringWithFormat:@"%d",1000]};
     NSDictionary *p = @{@"message" : parameters};
     [httpManager POST:@"https://echoes-ios.herokuapp.com/messages" parameters:p success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"JSON: %@", responseObject);
+        //NSLog(@"JSON: %@", responseObject);
+        [imagePicker dismissViewControllerAnimated:YES completion:^{
+            
+        }];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
+        [imagePicker dismissViewControllerAnimated:YES completion:^{
+            
+        }];
     }];
 }
 
