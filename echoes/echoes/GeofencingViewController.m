@@ -35,9 +35,9 @@
     _locationManager = [[CLLocationManager alloc] init];
     _locationManager.delegate = self;
     _personCenter = CLLocationCoordinate2DMake(0, 0);
-    if ([_locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
-        [_locationManager requestWhenInUseAuthorization];
-    }
+//    if ([_locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+//        [_locationManager requestWhenInUseAuthorization];
+//    }
     if ([_locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
         [_locationManager requestAlwaysAuthorization];
     }

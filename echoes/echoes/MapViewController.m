@@ -95,18 +95,20 @@
     MKPointAnnotation *ann = [viewDics objectForKey:region.identifier];
     CustomAnnotationView *annV = (CustomAnnotationView*)[_mapView viewForAnnotation:ann];
     NSString *m = [geo.messages objectForKey:region.identifier];
-    if(m.length > 100000){
+    if(m.length > 1000){
         NSData *data = [[NSData alloc]initWithBase64EncodedString:m options:NSDataBase64DecodingIgnoreUnknownCharacters];
         UIImage* image = [UIImage imageWithData:data];
         UIImageView* view = [[UIImageView alloc]initWithImage:image];
-        view.frame = (CGRect){-50,-65,100,70};
+        view.frame = (CGRect){-50,-70,50,50};
         [annV addSubview:view];
     }else{
         //ann.title = m;
         // [annV.text setText:m];
-        UILabel *l = [[UILabel alloc]initWithFrame:(CGRect){-60,-60,200,50}];
+        UILabel *l = [[UILabel alloc]initWithFrame:(CGRect){-40,-40,200,50}];
+        //l.center = annV.center;
+        
         [l setText:m];
-        l.textAlignment = NSTextAlignmentCenter;
+        //l.textAlignment = NSTextAlignmentCenter;
         [l setFont:[UIFont fontWithName:@"Default" size:8]];
         //        [l.layer setBorderWidth:2];
         //        [l.layer setBorderColor:[UIColor blackColor].CGColor];
