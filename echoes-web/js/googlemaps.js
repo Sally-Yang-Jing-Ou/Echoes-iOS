@@ -15,6 +15,7 @@ var json;
 	var map;
 
 	function initialize() {
+		var text_length;
 	  	var initialPoint = new google.maps.LatLng(locations[0].latitude, locations[0].longitude);
 	  	var infowindow = null;
 	  	var bounds = new google.maps.LatLngBounds();
@@ -29,6 +30,11 @@ var json;
 	   	// Draw circles on the screen
 	  	for (var i = 0; i < locations.length; i++) {
 	  	// Add the circle for this city to the map.
+	  		text_length = locations[i].body.length;
+	  		var plainText = true;
+	  		if(text_length >= 10000){
+	  			plainText = false;
+	  		}
 	  		var centerPoint = new google.maps.LatLng(locations[i].latitude, locations[i].longitude);
 	   		var populationOptions = {
 	      		strokeColor: '#FF0000',
@@ -42,17 +48,33 @@ var json;
 	    	};
 	    	cityCircle = new google.maps.Circle(populationOptions);
 	  		
-	  		var marker = new google.maps.Marker({
-	      		position: centerPoint,
-	      		map: map,
-	      	// the display text when the marker is on hover
-	      		title: locations[i].body
-	  		});
-
+	  		var marker;
+	  		if(Boolean(plainText) == true){
+	  			marker = new google.maps.Marker({
+	      			position: centerPoint,
+	      			map: map,
+	      		// the display text when the marker is on hover
+	      			title: locations[i].body
+	  			});
+	  			
+	  			infowindow = new google.maps.InfoWindow({
+      				content: locations[i].body
+  			 	});
+	  		}
+	  		else {
+	  			marker = new google.maps.Marker({
+	      			position: centerPoint,
+	      			map: map,
+	      		// the display text when the marker is on hover
+	      			title: "Image"
+	  			});
+	  			// decode the string first
+	  			infowindow = new google.maps.InfoWindow({
+      				content:'<IMG BORDER="0" ALIGN="Left" SRC="data:image/png;base64,'+ locations[i].body + '">'
+  			 	});
+	  		}
 	  	// render the info window
-	  	  	infowindow = new google.maps.InfoWindow({
-      			content: locations[i].body
-  			 });
+
 			listenMarker(marker,infowindow);
 			//createMarkerButton(marker);
 	  	}
@@ -65,14 +87,24 @@ var json;
 	//     map: map
 	// }
 
+	function deserialize(data, canvas) {
+	    var img = new Image();
+	    img.onload = function() {
+	        canvas.width = img.width;
+	        canvas.height = img.height;
+	        canvas.getContext("2d").drawImage(img, 0, 0);
+	    };
+
+	    img.src = data;
+	}
 
 	// deal with infowindow and autocenter
 	function listenMarker (marker, infowindow){
 	    google.maps.event.addListener(marker, 'click', function() {
 	                        infowindow.open(map, marker);
-	                        var bounds = new google.maps.LatLngBounds();
-	                        bounds.extend(marker.position);
-	                        map.fitBounds(bounds);
+	                     //   var bounds = new google.maps.LatLngBounds();
+	                     //   bounds.extend(marker.position);
+	                     //   map.fitBounds(bounds);
 	                    });
 	}
 
