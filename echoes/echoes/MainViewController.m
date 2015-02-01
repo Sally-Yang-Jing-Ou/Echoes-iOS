@@ -50,10 +50,6 @@
     [self.view addSubview: takeImageButton];
     [self.view addSubview: mapButton];
     
-    geo = [[GeofencingViewController alloc]initWithLocationDic:nil];
-    [self addChildViewController:geo];
-    [geo didMoveToParentViewController:self];
-    
     [self loadNavbar];
 }
 
@@ -78,7 +74,7 @@
 }
 
 -(void)mapButtonPressed{
-    MapViewController *mapViewController = [[MapViewController alloc]initWithFrame:(CGRect){0,50,self.view.frame.size.width, self.view.frame.size.height - 50} Regions: geo.regions PersonCenter:geo.personCenter];
+    MapViewController *mapViewController = [[MapViewController alloc]initWithFrame:(CGRect){0,50,self.view.frame.size.width, self.view.frame.size.height - 50} Regions: geo.regions PersonCenter:geo.personCenter Messages:geo.messages];
     [self.navigationController presentViewController:mapViewController animated:YES completion:^{
         
     }];

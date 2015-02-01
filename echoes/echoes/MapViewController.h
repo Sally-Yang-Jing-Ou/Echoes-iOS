@@ -14,15 +14,14 @@
 
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
+#import "GeofencingViewController.h"
 
 
-@interface MapViewController : UIViewController <MKMapViewDelegate, MKAnnotation>
+@interface MapViewController : UIViewController <MKMapViewDelegate, GeoFencingDelegate>
 
--(instancetype)initWithFrame:(CGRect)frame Regions:(NSMutableArray*)regions PersonCenter:(CLLocationCoordinate2D)center;
+-(instancetype)initWithFrame:(CGRect)frame Regions:(NSMutableArray*)regions PersonCenter:(CLLocationCoordinate2D)center Messages:(NSMutableDictionary*) messages;
 
 @property MKMapView* mapView;
 @property CGRect frame;
-@property NSMutableArray* regions;
-@property CLLocationCoordinate2D personCenter;
 
 @end

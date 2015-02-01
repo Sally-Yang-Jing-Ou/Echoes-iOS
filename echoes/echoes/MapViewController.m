@@ -10,14 +10,14 @@
 #import "MapViewController.h"
 #import <MapKit/MapKit.h>
 
-@implementation MapViewController
+@implementation MapViewController{
+    GeofencingViewController* geo;
+}
 
--(instancetype)initWithFrame:(CGRect)frame Regions:(NSMutableArray *)regions PersonCenter:(CLLocationCoordinate2D)center{
+-(instancetype)initWithFrame:(CGRect)frame Regions:(NSMutableArray *)regions PersonCenter:(CLLocationCoordinate2D)center Messages:(NSMutableDictionary *)messages{
     self = [super init];
     if(self){
         _frame = frame;
-        _regions = regions;
-        _personCenter = center;
     }
     return self;
 }
@@ -25,17 +25,17 @@
 -(void)loadView{
     _mapView = [[MKMapView alloc]initWithFrame:_frame];
     _mapView.delegate = self;
-    _mapView.centerCoordinate =_personCenter;
-    for(CLCircularRegion* r in _regions){
-        MKPointAnnotation *annotation = [[MKPointAnnotation alloc]init];
-        annotation.coordinate = r.center;
-        [_mapView addAnnotation:annotation];
-    }
+    _mapView.centerCoordinate =geo.personCenter;
+    //[_mapView regionThatFits:(MKCoordinateRegion){_personCenter, 400, 400}];
     self.view = _mapView;
 }
 
 -(void)viewDidLoad{
     [super viewDidLoad];
+    geo = [[GeofencingViewController alloc]initWithLocationDic:nil];
+    geo.delegate = self;
+    [self addChildViewController:geo];
+    [geo didMoveToParentViewController:self];
 }
 
 -(MKAnnotationView *) mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
@@ -68,5 +68,19 @@
     
     [self.mapView addAnnotation:point];
 }
-         
+
+#pragma mark - GeoFencing Delegate
+
+-(void)dataFinishedLoading{
+    [_mapView removeAnnotations:_mapView.annotations];
+    for(CLCircularRegion* r in geo.regions){
+        MKPointAnnotation *annotation = [[MKPointAnnotation alloc]init];
+        annotation.coordinate = r.center;
+        [_mapView addAnnotation:annotation];
+    }
+}
+
+-(void)personLocationUpdated{
+    _mapView.centerCoordinate = geo.personCenter;
+}
 @end

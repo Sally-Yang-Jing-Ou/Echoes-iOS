@@ -12,7 +12,6 @@
 #import "CustomCircularRegion.h"
 
 @implementation GeofencingViewController{
-    NSMutableDictionary* messages;
 }
 
 -(instancetype)initWithLocationDic:(NSArray *)locationDic{
@@ -29,7 +28,7 @@
     if(![CLLocationManager locationServicesEnabled]){
         return;
     }
-    messages = @{}.mutableCopy;
+    _messages = @{}.mutableCopy;
     _regions = @[].mutableCopy;
     _locationManager = [[CLLocationManager alloc] init];
     _locationManager.delegate = self;
@@ -46,7 +45,7 @@
 #pragma mark - CLLocationManager Delegate
 
 -(void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLCircularRegion *)region{
-    NSString *m = [messages valueForKey:region.identifier];
+    NSString *m = [_messages valueForKey:region.identifier];
     if(m.length < 100000){
         NSString *message = [NSString stringWithFormat:@"Entered region: %f, %f, %@",region.center.latitude, region.center.longitude, m];
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Region Alert" message:message delegate:nil cancelButtonTitle:@"Got it" otherButtonTitles:nil];
@@ -76,7 +75,7 @@
         for (CLCircularRegion* regions in set) {
            // NSLog(@"%f, %f", regions.center.latitude, regions.center.longitude);
             //NSLog(@"%f", regions.radius);
-            [messages removeObjectForKey:regions.identifier];
+            [_messages removeObjectForKey:regions.identifier];
             [_locationManager stopMonitoringForRegion:regions];
         }
         [_regions removeAllObjects];
@@ -96,14 +95,15 @@
             radius = 1000;//[[dictionary objectForKey:@"radius"] intValue];
             CLLocationCoordinate2D center = (CLLocationCoordinate2D){latitude, longitude};
             CLCircularRegion *region = [[CustomCircularRegion alloc] initWithCenter:center radius:radius identifier:identifier];
-            [messages setObject:message forKey:identifier];
+            [_messages setObject:message forKey:identifier];
             [_regions addObject:region];
             [_locationManager startMonitoringForRegion: region];
         }
+        [_delegate dataFinishedLoading];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
-    
+    [_delegate personLocationUpdated];
    
 }
 
