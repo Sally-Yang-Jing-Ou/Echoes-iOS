@@ -11,6 +11,7 @@
 
 @implementation CustomCircularRegion
 
+
 - (instancetype)initWithCenter:(CLLocationCoordinate2D)center
                         radius:(CLLocationDistance)radius
                     identifier:(NSString *)identifier
@@ -22,5 +23,8 @@
     return self;
 }
 
+-(NSString*)getMessage{
+    return _message;
+}
 @end
 

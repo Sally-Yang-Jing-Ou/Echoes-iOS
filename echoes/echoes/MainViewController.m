@@ -9,6 +9,7 @@
 #import "MainViewController.h"
 #import "GeofencingViewController.h"
 #import "SendMessageViewController.h"
+#import "AFHTTPRequestOperationManager.h"
 
 @interface MainViewController ()
 
@@ -18,6 +19,8 @@
     UIButton *wantToSendButton;
     UIButton *takeImageButton;
     UIButton *takeVideoButton;
+    
+    NSString* putMessage;
 }
 
 - (void)viewDidLoad {
@@ -41,9 +44,13 @@
     [takeVideoButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
     [takeVideoButton addTarget:self action:@selector(takeVideoButtonPressed) forControlEvents:UIControlEventTouchUpInside];
 
-    [self.view addSubview wantToSendButton];
-    [self.view addSubview takeImageButton];
-    [self.view addSubview takeVideoButton];
+    [self.view addSubview: wantToSendButton];
+    [self.view addSubview: takeImageButton];
+    [self.view addSubview: takeVideoButton];
+    
+    GeofencingViewController *geo = [[GeofencingViewController alloc]initWithLocationDic:nil];
+    [self addChildViewController:geo];
+    [geo didMoveToParentViewController:self];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -53,18 +60,74 @@
 
 -(void)wantToSendButtonPressed {
     SendMessageViewController *sendMessageVC = [[SendMessageViewController alloc]init];
-    //GeofencingViewController *geo = [[GeofencingViewController alloc]initWithLocationDic:nil];
+    sendMessageVC.delegate = self;
     [self.navigationController pushViewController:sendMessageVC animated:YES];
 }
 
 -(void)takeImageButtonPressed{
-    UIImagePickerController *imagePicker = [[UIImagePickerController alloc]initWithRootViewController: self];
-    [self presentViewController:imagePicker animated:YES completion:{
-
+    UIImagePickerController* imagePicker = [[UIImagePickerController alloc]init];
+    imagePicker.sourceType = UIImagePickerControllerCameraCaptureModePhoto;
+    imagePicker.delegate = self;
+    [self presentViewController:imagePicker animated:YES completion:^{
+        
     }];
 }
 
 -(void)takeVideoButtonPressed{
+    UIImagePickerController* imagePicker = [[UIImagePickerController alloc]init];
+    imagePicker.sourceType = UIImagePickerControllerCameraCaptureModeVideo;
+    imagePicker.allowsEditing = YES;
+    imagePicker.delegate = self;
+    [self presentViewController:imagePicker animated:YES completion:^{
+        
+    }];
+}
 
+#pragma mark - SendMessageController Delegate
+
+-(void)messageFinishedSendingWithMessage:(NSString *)message{
+    if(!_locationManager){
+        _locationManager = [[CLLocationManager alloc]init];
+    }
+    _locationManager.delegate = self;
+    putMessage = message;
+    [_locationManager startUpdatingLocation];
+}
+
+#pragma mark - UIImagePickerController Delegate
+
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
+    UIImage* image = [info valueForKey:UIImagePickerControllerOriginalImage];
+    NSData* data = UIImagePNGRepresentation(image);
+    NSString* imageString = [data base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+    if(!_locationManager){
+        _locationManager = [[CLLocationManager alloc]init];
+    }
+    _locationManager.delegate = self;
+    putMessage = imageString;
+    [picker.navigationController popViewControllerAnimated:YES];
+    [_locationManager startUpdatingLocation];
+}
+
+#pragma mark - CLLocationManager Delegate
+
+-(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
+    [_locationManager stopUpdatingLocation];
+    CLLocation *location = [locations lastObject];
+    float lat = location.coordinate.latitude;
+    float lon = location.coordinate.longitude;
+    
+    AFHTTPRequestOperationManager *httpManager = [AFHTTPRequestOperationManager manager];
+    httpManager.requestSerializer = [AFJSONRequestSerializer serializer];
+    NSDictionary *parameters = @{@"body": putMessage,
+                                 @"latitude": [NSString stringWithFormat:@"%f",lat],
+                                 @"longitude": [NSString stringWithFormat:@"%f",lon],
+                                 @"radius": [NSString stringWithFormat:@"%d",1000]};
+    NSDictionary *p = @{@"message" : parameters};
+    [httpManager POST:@"https://echoes-ios.herokuapp.com/messages" parameters:p success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
 }
 @end

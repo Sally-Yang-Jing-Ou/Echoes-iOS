@@ -13,11 +13,13 @@
 #endif
 
 @interface CustomCircularRegion : CLCircularRegion
-@property (nonatomic, strong) NSString* message;
+@property NSString* message;
 
 - (instancetype)initWithCenter:(CLLocationCoordinate2D)center
                         radius:(CLLocationDistance)radius
                     identifier:(NSString *)identifier
                        message:(NSString *) message;
+
+-(NSString*) getMessage;
 
 @end

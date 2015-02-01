@@ -13,11 +13,7 @@
 @implementation SendMessageViewController{
     UITextField *text;
     UIButton* sendButton;
-    
-    NSString *message;
-    double lat;
-    double lon;
-    int radius;
+
 }
 
 
@@ -35,46 +31,8 @@
 }
 
 -(void)sendMessagePressed{
-    message = text.text;
-    _locationManager = [[CLLocationManager alloc]init];
-    if ([_locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
-        [_locationManager requestWhenInUseAuthorization];
-    }
-    _locationManager.delegate = self;
-    [_locationManager startUpdatingLocation];
+    [_delegate messageFinishedSendingWithMessage:text.text];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
-#pragma mark - LocationManager Delegate
-
--(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
-    [_locationManager stopUpdatingLocation];
-    CLLocation *location = [locations lastObject];
-    lat = location.coordinate.latitude;
-    lon = location.coordinate.longitude;
-    
-    AFHTTPRequestOperationManager *httpManager = [AFHTTPRequestOperationManager manager];
-    //httpManager.responseSerializer.acceptableStatusCodes = [NSIndexSet indexSetWithIndex:400];
-    httpManager.requestSerializer = [AFJSONRequestSerializer serializer];
-    NSDictionary *parameters = @{@"body": message,
-                                 @"latitude": [NSString stringWithFormat:@"%f",lat],
-                                 @"longitude": [NSString stringWithFormat:@"%f",lon],
-                                 @"radius": [NSString stringWithFormat:@"%d",1000]};
-    NSDictionary *p = @{@"message" : parameters};
-    [httpManager POST:@"https://echoes-ios.herokuapp.com/messages" parameters:p success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"JSON: %@", responseObject);
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-    }];
-    radius = 1000;
-}
-
-#pragma mark - NSURLConnection Delegate
-
--(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error{
-    NSLog(@"%@",error.description);
-}
-
--(void)connection:(NSURLConnection *)connection willSendRequestForAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge{
-    NSLog(@"issending");
-}
 @end
