@@ -10,6 +10,7 @@
 #import "GeofencingViewController.h"
 #import "SendMessageViewController.h"
 #import "AFHTTPRequestOperationManager.h"
+#import "MapViewController.h"
 
 @interface MainViewController ()
 
@@ -18,9 +19,10 @@
 @implementation MainViewController{
     UIButton *wantToSendButton;
     UIButton *takeImageButton;
-    UIButton *takeVideoButton;
+    UIButton *mapButton;
     
     NSString* putMessage;
+    GeofencingViewController* geo;
 }
 
 - (void)viewDidLoad {
@@ -38,19 +40,21 @@
     [takeImageButton addTarget:self action:@selector(takeImageButtonPressed) forControlEvents:UIControlEventTouchUpInside];
 
 
-    takeVideoButton = [UIButton buttonWithType: UIButtonTypeRoundedRect];
-    takeVideoButton.frame = (CGRect){100,400,200,50};
-    [takeVideoButton setTitle:@"Send Video" forState:UIControlStateNormal];
-    [takeVideoButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-    [takeVideoButton addTarget:self action:@selector(takeVideoButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    mapButton = [UIButton buttonWithType: UIButtonTypeRoundedRect];
+    mapButton.frame = (CGRect){100,400,200,50};
+    [mapButton setTitle:@"Send Video" forState:UIControlStateNormal];
+    [mapButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [mapButton addTarget:self action:@selector(mapButtonPressed) forControlEvents:UIControlEventTouchUpInside];
 
     [self.view addSubview: wantToSendButton];
     [self.view addSubview: takeImageButton];
-    [self.view addSubview: takeVideoButton];
+    [self.view addSubview: mapButton];
     
-    GeofencingViewController *geo = [[GeofencingViewController alloc]initWithLocationDic:nil];
+    geo = [[GeofencingViewController alloc]initWithLocationDic:nil];
     [self addChildViewController:geo];
     [geo didMoveToParentViewController:self];
+    
+    [self loadNavbar];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -73,12 +77,9 @@
     }];
 }
 
--(void)takeVideoButtonPressed{
-    UIImagePickerController* imagePicker = [[UIImagePickerController alloc]init];
-    imagePicker.sourceType = UIImagePickerControllerCameraCaptureModeVideo;
-    imagePicker.allowsEditing = YES;
-    imagePicker.delegate = self;
-    [self presentViewController:imagePicker animated:YES completion:^{
+-(void)mapButtonPressed{
+    MapViewController *mapViewController = [[MapViewController alloc]initWithFrame:(CGRect){0,50,self.view.frame.size.width, self.view.frame.size.height - 50} Regions: geo.regions PersonCenter:geo.personCenter];
+    [self.navigationController presentViewController:mapViewController animated:YES completion:^{
         
     }];
 }
@@ -130,4 +131,16 @@
         NSLog(@"Error: %@", error);
     }];
 }
+
+
+
+-(void)loadNavbar{
+    self.navigationController.view.backgroundColor = [UIColor whiteColor];
+    UILabel *label = [[UILabel alloc]initWithFrame:(CGRect){0,10,100,50}];
+    label.center = (CGPoint){self.navigationController.view.center.x,42};
+    label.textAlignment = NSTextAlignmentCenter;
+    [label setText:@"Echoes"];
+    [self.navigationController.view addSubview:label];
+}
+
 @end

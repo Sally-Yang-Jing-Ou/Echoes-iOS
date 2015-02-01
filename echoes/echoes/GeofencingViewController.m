@@ -30,8 +30,10 @@
         return;
     }
     messages = @{}.mutableCopy;
+    _regions = @[].mutableCopy;
     _locationManager = [[CLLocationManager alloc] init];
     _locationManager.delegate = self;
+    _personCenter = CLLocationCoordinate2DMake(0, 0);
     if ([_locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
         [_locationManager requestWhenInUseAuthorization];
     }
@@ -63,6 +65,8 @@
 
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
     //NSLog(@"update");
+    CLLocation* l = [locations lastObject];
+    _personCenter = l.coordinate;
     AFHTTPRequestOperationManager *httpManager = [AFHTTPRequestOperationManager manager];
     [httpManager GET:@"https://echoes-ios.herokuapp.com/messages" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         //NSLog(@"JSON: %@", responseObject);
@@ -75,6 +79,7 @@
             [messages removeObjectForKey:regions.identifier];
             [_locationManager stopMonitoringForRegion:regions];
         }
+        [_regions removeAllObjects];
         NSString* message;
         int ident;
         NSString* identifier;
@@ -92,6 +97,7 @@
             CLLocationCoordinate2D center = (CLLocationCoordinate2D){latitude, longitude};
             CLCircularRegion *region = [[CustomCircularRegion alloc] initWithCenter:center radius:radius identifier:identifier];
             [messages setObject:message forKey:identifier];
+            [_regions addObject:region];
             [_locationManager startMonitoringForRegion: region];
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {

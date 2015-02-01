@@ -18,6 +18,8 @@
 
 @property NSArray *locationDic;
 @property (strong, nonatomic) CLLocationManager *locationManager;
+@property NSMutableArray* regions;
+@property CLLocationCoordinate2D personCenter;
 
 -(instancetype)initWithLocationDic:(NSArray*) locationDic;
 
