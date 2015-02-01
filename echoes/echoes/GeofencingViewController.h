@@ -14,11 +14,25 @@
 
 #endif
 
+@protocol  GeoFencingDelegate;
+
 @interface GeofencingViewController : UIViewController <CLLocationManagerDelegate>
 
+@property (weak)id<GeoFencingDelegate> delegate;
 @property NSArray *locationDic;
 @property (strong, nonatomic) CLLocationManager *locationManager;
+@property NSMutableArray* regions;
+@property CLLocationCoordinate2D personCenter;
+@property NSMutableDictionary* messages;
 
 -(instancetype)initWithLocationDic:(NSArray*) locationDic;
+
+@end
+
+@protocol GeoFencingDelegate <NSObject>
+
+-(void)dataFinishedLoading;
+-(void)personLocationUpdated;
+-(void)geoFencingHit:(CLCircularRegion*)region;
 
 @end

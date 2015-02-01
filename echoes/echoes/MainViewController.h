@@ -7,9 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreLocation/CoreLocation.h>
+#import "SendMessageViewController.h"
 
-@interface MainViewController : UIViewController
+@interface MainViewController : UIViewController <UINavigationControllerDelegate, UIImagePickerControllerDelegate, CLLocationManagerDelegate, SendMessageDelegate>
 
+@property (nonatomic, strong)CLLocationManager *locationManager;
 
 @end
 

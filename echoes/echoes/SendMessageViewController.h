@@ -14,9 +14,18 @@
 
 #endif
 
+@protocol SendMessageDelegate;
+
 @interface SendMessageViewController : UIViewController <CLLocationManagerDelegate, NSURLSessionDelegate, NSURLConnectionDelegate>
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
+@property (weak) id<SendMessageDelegate> delegate;
 
+
+@end
+
+@protocol SendMessageDelegate <NSObject>
+
+-(void)messageFinishedSendingWithMessage:(NSString*)message;
 
 @end

@@ -13,68 +13,35 @@
 @implementation SendMessageViewController{
     UITextField *text;
     UIButton* sendButton;
-    
-    NSString *message;
-    double lat;
-    double lon;
-    int radius;
+
 }
 
 
 -(void)viewDidLoad{
     [super viewDidLoad];
-    text = [[UITextField alloc]initWithFrame:(CGRect){100,200,200,50}];
+    text = [[UITextField alloc]initWithFrame:(CGRect){100,275,200,50}];
+    [text setBackgroundColor:[UIColor colorWithRed:13.0/255 green:120.0/255 blue:121.0/255 alpha:1]];
+    text.layer.cornerRadius = 10;
+    text.clipsToBounds = YES;
     [text becomeFirstResponder];
     sendButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    sendButton.frame = (CGRect){100,300,200,50};
-    [sendButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-    [sendButton setTitle:@"Send" forState:UIControlStateNormal];
+    sendButton.frame = (CGRect){100,375,200,80};
+    [sendButton setTitle:@"Send Message" forState:UIControlStateNormal];
+    [sendButton setTitleColor:[UIColor colorWithRed:71.0/255 green:62.0/255 blue:63.0/255 alpha:1] forState:UIControlStateNormal];
+    sendButton.layer.cornerRadius = 10; // this value vary as per your desire
+    sendButton.clipsToBounds = YES;
+    sendButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:20];
+    [sendButton setBackgroundColor:[UIColor colorWithRed:249.0/255 green:229.0/255 blue:89.0/255 alpha:1]];
     [sendButton addTarget:self action:@selector(sendMessagePressed) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:text];
     [self.view addSubview:sendButton];
+    
+    [self.view setBackgroundColor:[UIColor colorWithRed:33.0/255 green:140.0/255 blue:141.0/255 alpha:1]];
 }
 
 -(void)sendMessagePressed{
-    message = text.text;
-    _locationManager = [[CLLocationManager alloc]init];
-    if ([_locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
-        [_locationManager requestWhenInUseAuthorization];
-    }
-    _locationManager.delegate = self;
-    [_locationManager startUpdatingLocation];
+    [_delegate messageFinishedSendingWithMessage:text.text];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
-#pragma mark - LocationManager Delegate
-
--(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
-    [_locationManager stopUpdatingLocation];
-    CLLocation *location = [locations lastObject];
-    lat = location.coordinate.latitude;
-    lon = location.coordinate.longitude;
-    
-    AFHTTPRequestOperationManager *httpManager = [AFHTTPRequestOperationManager manager];
-    //httpManager.responseSerializer.acceptableStatusCodes = [NSIndexSet indexSetWithIndex:400];
-    httpManager.requestSerializer = [AFJSONRequestSerializer serializer];
-    NSDictionary *parameters = @{@"body": message,
-                                 @"latitude": [NSString stringWithFormat:@"%f",lat],
-                                 @"longitude": [NSString stringWithFormat:@"%f",lon],
-                                 @"radius": [NSString stringWithFormat:@"%d",1000]};
-    NSDictionary *p = @{@"message" : parameters};
-    [httpManager POST:@"https://echoes-ios.herokuapp.com/messages" parameters:p success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"JSON: %@", responseObject);
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-    }];
-    radius = 1000;
-}
-
-#pragma mark - NSURLConnection Delegate
-
--(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error{
-    NSLog(@"%@",error.description);
-}
-
--(void)connection:(NSURLConnection *)connection willSendRequestForAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge{
-    NSLog(@"issending");
-}
 @end
