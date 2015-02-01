@@ -58,7 +58,8 @@ var json;
 	  			});
 	  			
 	  			infowindow = new google.maps.InfoWindow({
-      				content: locations[i].body
+      				content: '<br> Loaction: ('+ locations[i].latitude + ', ' + locations[i].longitude + ')' + '</br>'
+      						+ '<br>'+ locations[i].body + '</br>'
   			 	});
 	  		}
 	  		else {
@@ -70,7 +71,9 @@ var json;
 	  			});
 	  			// decode the string first
 	  			infowindow = new google.maps.InfoWindow({
-      				content:'<IMG BORDER="0" ALIGN="Left" SRC="data:image/png;base64,'+ locations[i].body + '">'
+      				content: '<br> Loaction: ('+ locations[i].latitude + ', ' + locations[i].longitude + ')' + '</br>'
+      						+ '<br>'+ '<IMG BORDER="0" ALIGN="Left" SRC="data:image/png;base64,'+ locations[i].body + '"/>' + '</br>'
+
   			 	});
 	  		}
 	  	// render the info window
