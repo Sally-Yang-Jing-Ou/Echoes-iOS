@@ -18,7 +18,9 @@ Technology Stack
 --------
 
 Backend: Ruby on Rails
+
 Web: JavaScript, Google Maps API
+
 iOS: Objective-C, AFNetworking, Geofencing
 
 Screenshots
