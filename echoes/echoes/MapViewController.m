@@ -102,16 +102,12 @@
         view.frame = (CGRect){-50,-70,50,50};
         [annV addSubview:view];
     }else{
-        //ann.title = m;
-        // [annV.text setText:m];
+
         UILabel *l = [[UILabel alloc]initWithFrame:(CGRect){-40,-40,200,50}];
-        //l.center = annV.center;
         
         [l setText:m];
-        //l.textAlignment = NSTextAlignmentCenter;
         [l setFont:[UIFont fontWithName:@"Default" size:8]];
-        //        [l.layer setBorderWidth:2];
-        //        [l.layer setBorderColor:[UIColor blackColor].CGColor];
+
         [annV addSubview:l];
     }
 }
